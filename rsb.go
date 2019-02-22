@@ -2,17 +2,16 @@ package rsb
 
 import (
 	"math/rand"
-
-	"github.com/kpango/fastime"
+	"time"
 )
 
 type Object struct {
 	i int
 }
 
-var (
-	f = fastime.New()
-)
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
 
 func knuth(n int, fk float32) []Object {
 	k := int(float32(n) * fk)
@@ -20,7 +19,6 @@ func knuth(n int, fk float32) []Object {
 	res := make([]Object, 0, k)
 	t, m := 0, 0
 	for m < k {
-		rand.Seed(f.UnixNanoNow())
 		if float64(n-t)*rand.Float64() < float64(k-m) {
 			res = append(res, objs[t])
 			m++
@@ -35,7 +33,6 @@ func shufflePartial(n int, fk float32) []Object {
 	objs := genData(n)
 	res := make([]Object, 0, k)
 	for i := 1; i <= k; i++ {
-		rand.Seed(f.UnixNanoNow())
 		pos := rand.Int() % (n - i)
 		res = append(res, objs[i+pos])
 		objs[i], objs[i+pos] = objs[i+pos], objs[i]
